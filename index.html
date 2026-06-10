@@ -20,12 +20,32 @@
   gap:10px;
 }
     .logo img {
-  height: 260px;
-  background: white;
-  padding: 10px 14px;
-  border-radius: 6px;
-  display: block;
+    height: 260px;
+    background: white;
+    padding: 0;              /* remove the big white border */
+    border-radius: 6px;
+    object-fit: contain;     /* makes the logo fill the box */
+    display: block;
 }
+  .logo img {
+    height: 260px;
+    background: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    display: block;
+  }
+
+  .logo-box {
+    height: 260px;
+    width: 260px;
+    overflow: hidden;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
     .logo-text { font-weight:bold; letter-spacing:1px; }
     .top-actions a { margin-left:10px; text-decoration:none; }
     .btn { padding:8px 14px; border-radius:4px; border:none; font-size:14px; cursor:pointer; }
@@ -50,9 +70,11 @@
 
 <header>
   <div class="logo">
-    <img src="life_energy.png" alt="Life Energy Inspections">
-    <div class="logo-text">LIFE ENERGY INSPECTIONS</div>
-  </div>
+    <div class="logo-box">
+        <img src="life_energy.png" alt="Life Energy Inspections">
+    </div>
+</div>
+
   <div class="top-actions">
     <a href="tel:18172693437">
       <button class="btn btn-call">Call Now</button>
