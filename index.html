@@ -99,42 +99,82 @@
       <h2>Request an Inspection</h2>
       <p>Fill out this form and you’ll receive confirmation by email. We’ll follow up to schedule.</p>
 
- import twilio from "twilio";
+<form id="inspectionForm" action="https://inspection-sms-webhook.vercel.app/api/sms" method="POST">
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).send("Method Not Allowed");
-  }
+  <p>Fill out this form and you’ll receive confirmation by email. We’ll follow up to schedule.</p>
 
-  const { name, phone, email, address, message } = req.body;
+  <label>
+    Name
+    <input type="text" name="name" required>
+  </label>
 
-  const client = twilio(
-    process.env.TWILIO_SID,
-    process.env.TWILIO_AUTH
-  );
+  <label>
+    Phone
+    <input type="tel" name="phone" required>
+  </label>
 
-  const text = `
-New Inspection Request:
-Name: ${name}
-Phone: ${phone}
-Email: ${email}
-Address: ${address}
-Message: ${message}
-  `;
+  <label>
+    Email
+    <input type="email" name="email" required>
+  </label>
 
-  try {
-    await client.messages.create({
-      body: text,
-      from: process.env.TWILIO_NUMBER,
-      to: "+1YOURCELLPHONE"
+  <label>
+    Project address
+    <input type="text" name="address" required>
+  </label>
+
+  <label>
+    Inspection type
+    <select name="inspection_type" required>
+      <option value="">Select type</option>
+      <option>IECC Building Inspection</option>
+      <option>IECC Mechanical Inspection</option>
+      <option>IECC Electrical Inspection</option>
+      <option>IECC Final Inspection</option>
+    </select>
+  </label>
+
+  <label>
+    Preferred date/time
+    <input type="text" name="preferred_datetime">
+  </label>
+
+  <label>
+    Notes
+    <textarea name="notes"></textarea>
+  </label>
+
+  <button type="submit" class="submit-btn">Submit Request</button>
+</form>
+
+<div id="successMessage" style="display:none; margin-top:20px;">
+  Your request has been submitted. We will contact you shortly.
+</div>
+
+<script>
+  const form = document.getElementById('inspectionForm');
+  const successMessage = document.getElementById('successMessage');
+
+  form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: { 'Accept': 'application/json' }
     });
 
-    res.status(200).json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "SMS failed" });
-  }
-}
+    if (response.ok) {
+      form.reset();
+      successMessage.style.display = 'block';
+    } else {
+      alert("There was an issue submitting your request. Please try again.");
+    }
+  });
+</script>
+
 
 
   <input type="hidden" name="_subject" value="New Inspection Request from Website">
